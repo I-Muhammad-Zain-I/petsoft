@@ -13,14 +13,15 @@ const Layout = async ({
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
-  const response = await fetch(
-    "https://bytegrad.com/course-assets/projects/petsoft/api/pets"
-  );
-  if (!response.ok) {
-    throw new Error("Failed to fetch pets");
-  }
-  const data: PetType[] = await response.json();
-  console.log(data);
+  // const response = await fetch(
+  //   "https://bytegrad.com/course-assets/projects/petsoft/api/pets"
+  // );
+  // if (!response.ok) {
+  //   throw new Error("Failed to fetch pets");
+  // }
+  // const data: PetType[] = await response.json();
+  // console.log(data);
+  const pets: PetType = (await prisma?.pet.findMany()) ?? [];
 
   return (
     <>
@@ -28,7 +29,7 @@ const Layout = async ({
       <section className="flex flex-col max-w-[1050px] mx-auto px-5 min-h-screen">
         <AppHeader />
         <SearchContextProvider>
-          <PetContextProvider data={data}>{children}</PetContextProvider>
+          <PetContextProvider data={pets}>{children}</PetContextProvider>
         </SearchContextProvider>
         <AppFooter />
       </section>

@@ -49,7 +49,9 @@ const TopBar = ({ selectedPet }: Props) => {
         width={75}
         className="h-[75px] w-[75px] rounded-full object-cover"
       />
-      <h2 className="text-3xl font-semibold leading-7 ml-5">Benjamin</h2>
+      <h2 className="text-3xl font-semibold leading-7 ml-5">
+        {selectedPet?.name}
+      </h2>
       <div className="ml-auto space-x-3">
         <PetButton actionType="edit" onClick={() => {}}>
           Edit

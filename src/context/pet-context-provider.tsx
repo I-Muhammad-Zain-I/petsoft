@@ -2,6 +2,7 @@
 import React, { ReactNode, useState } from "react";
 import { createContext } from "react";
 import { PetType } from "../../types";
+import { addPet } from "@/lib/actions";
 
 type PetContextProviderProps = {
   data: PetType[] | [];
@@ -14,6 +15,7 @@ type PetContextType = {
   selectedPet: PetType | undefined;
   numberOfPets: number;
   handleAddPet: (newPet: Omit<PetType, "id">) => void;
+  handleEditPet: (petId: string, newPet: Omit<PetType, "id">) => void;
   handleCheckoutPet: (id: string) => void;
   handleChangeSelectedPetId: (id: string) => void;
 };
@@ -24,19 +26,38 @@ export const PetContext = createContext<PetContextType>({
   selectedPet: undefined,
   numberOfPets: 0,
   handleAddPet: (newPet: Omit<PetType, "id">) => {},
+  handleEditPet: (petId: string, newPet: Omit<PetType, "id">) => {},
   handleCheckoutPet: (id: string) => {},
   handleChangeSelectedPetId: (id: string) => {},
 });
 
-const PetContextProvider = ({ data, children }: PetContextProviderProps) => {
-  const [pets, setPets] = useState(data);
+const PetContextProvider = ({
+  data: pets,
+  children,
+}: PetContextProviderProps) => {
+  const [spets, setPets] = useState(pets);
   const [selectedPetId, setSelectedPetId] = useState<string | null>(null);
 
   const selectedPet = pets.find((pet) => pet.id === selectedPetId);
   const numberOfPets = pets.length;
 
-  const handleAddPet = (newPet: Omit<PetType, "id">) => {
+  const handleAddPet = async (newPet: Omit<PetType, "id">) => {
     setPets((prev) => [...prev, { ...newPet, id: Date.now().toString() }]);
+    await addPet(newPet);
+  };
+
+  const handleEditPet = (petId: string, newPet: Omit<PetType, "id">) => {
+    setPets((prev) =>
+      prev.map((pet) => {
+        if (pet.id === petId) {
+          return {
+            id: petId,
+            ...newPet,
+          };
+        }
+        return pet;
+      })
+    );
   };
 
   const handleCheckoutPet = (id: string) => {
@@ -56,6 +77,7 @@ const PetContextProvider = ({ data, children }: PetContextProviderProps) => {
         selectedPet,
         numberOfPets,
         handleAddPet,
+        handleEditPet,
         handleCheckoutPet,
         handleChangeSelectedPetId,
       }}

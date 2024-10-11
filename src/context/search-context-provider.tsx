@@ -1,7 +1,7 @@
 "use client";
 import React, { ReactNode, useState } from "react";
 import { createContext } from "react";
-import { PetType } from "../../types";
+import { Pet } from "@prisma/client";
 
 type SearchContextProviderProps = {
   children: ReactNode;

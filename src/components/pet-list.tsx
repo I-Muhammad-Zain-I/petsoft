@@ -7,6 +7,8 @@ import PetButton from "./pet-button";
 
 const PetList = () => {
   const { pets, selectedPetId, handleChangeSelectedPetId } = usePetContext();
+  console.log("pets", pets);
+
   const { searchQuery } = useSearchContext();
 
   const filteredPets = pets.filter((pet) =>

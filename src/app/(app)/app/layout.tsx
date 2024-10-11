@@ -3,8 +3,10 @@ import BackgroundPattern from "@/components/background-pattern";
 import AppFooter from "@/components/app-footer";
 import React from "react";
 import PetContextProvider from "@/context/pet-context-provider";
-import { PetType } from "../../../../types";
+import { Pet } from "@prisma/client";
 import SearchContextProvider from "@/context/search-context-provider";
+import { Toaster } from "@/components/ui/sonner";
+import prisma from "@/lib/db";
 
 type Props = {};
 
@@ -19,9 +21,13 @@ const Layout = async ({
   // if (!response.ok) {
   //   throw new Error("Failed to fetch pets");
   // }
-  // const data: PetType[] = await response.json();
+  // const data: Pet[] = await response.json();
   // console.log(data);
-  const pets: PetType = (await prisma?.pet.findMany()) ?? [];
+  const pets: Pet[] = await prisma?.pet.findMany();
+  console.log(pets);
+  // const user = await prisma?.user.findUnique({
+
+  // })
 
   return (
     <>
@@ -33,6 +39,7 @@ const Layout = async ({
         </SearchContextProvider>
         <AppFooter />
       </section>
+      <Toaster position="top-right" />
     </>
   );
 };

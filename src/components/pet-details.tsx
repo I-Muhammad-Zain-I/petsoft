@@ -1,8 +1,8 @@
 "use client";
 import { usePetContext } from "@/lib/hooks";
 import Image from "next/image";
-import React from "react";
-import { PetType } from "../../types";
+import React, { useTransition } from "react";
+import { Pet } from "@prisma/client";
 import PetButton from "./pet-button";
 
 const PetDetails = () => {
@@ -30,7 +30,7 @@ const PetDetails = () => {
 export default PetDetails;
 
 type Props = {
-  selectedPet: PetType | undefined;
+  selectedPet: Pet | undefined;
 };
 
 const EmptyView = () => {
@@ -39,6 +39,7 @@ const EmptyView = () => {
 
 const TopBar = ({ selectedPet }: Props) => {
   const { handleCheckoutPet } = usePetContext();
+  const [isPending, startTransition] = useTransition();
 
   return (
     <div className="flex items-center bg-white px-8 py-5 border-b border-light">
@@ -58,7 +59,8 @@ const TopBar = ({ selectedPet }: Props) => {
         </PetButton>
         <PetButton
           actionType="checkout"
-          onClick={() => handleCheckoutPet(selectedPet?.id)}
+          onClick={async () => await handleCheckoutPet(selectedPet?.id!)}
+          disabled={isPending}
         >
           Checkout
         </PetButton>

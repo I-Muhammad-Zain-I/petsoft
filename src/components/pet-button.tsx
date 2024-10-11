@@ -16,21 +16,28 @@ import PetForm from "./pet-form";
 type Props = {
   actionType: "add" | "edit" | "checkout";
   children?: string;
+  disabled?: boolean;
   onClick: () => void;
 };
 
-const PetButton = ({ children, actionType, onClick }: Props) => {
+const PetButton = ({
+  children,
+  actionType,
+  disabled = false,
+  onClick,
+}: Props) => {
   const [isFormOpen, setIsFormOpen] = useState(false);
 
   if (actionType === "checkout") {
     return (
-      <Button variant={"secondary"} onClick={onClick}>
+      <Button variant={"secondary"} onClick={onClick} disabled={disabled}>
         {children}
       </Button>
     );
   }
 
   // if (actionType === "edit" || actionType === "add")
+
   return (
     <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
       <DialogTrigger asChild>

@@ -1,3 +1,5 @@
+"use client";
+
 import Branding from "@/components/branding";
 import ContentBlock from "@/components/content-block";
 import PetButton from "@/components/pet-button";
@@ -5,11 +7,14 @@ import PetDetails from "@/components/pet-details";
 import PetList from "@/components/pet-list";
 import SearchForm from "@/components/search-form";
 import Stats from "@/components/stats";
+import { useSession } from "next-auth/react";
 import React from "react";
 
 type Props = {};
 
 const Page = (props: Props) => {
+  const session = useSession();
+  console.log(session);
   return (
     <main>
       <div className="flex items-center justify-between text-white py-8">

@@ -8,16 +8,13 @@ import { Input } from "./ui/input";
 import { login, signUp } from "@/lib/actions";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AuthSchema } from "@/lib/validations";
+import { LoginSchema } from "@/lib/validations";
 import { z } from "zod";
 import FormError from "./form-error";
 import FormSuccess from "./form-success";
+import SocialButton from "./social-button";
 
-type Props = {
-  type: "login" | "signup";
-};
-
-const AuthForm = ({ type }: Props) => {
+const LoginForm = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   // const [isPending, startTransition] = useTransition();
@@ -28,23 +25,22 @@ const AuthForm = ({ type }: Props) => {
     reset: resetForm,
     register,
   } = useForm({
-    resolver: zodResolver(AuthSchema),
+    resolver: zodResolver(LoginSchema),
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
-  const onSubmit = (values: z.infer<typeof AuthSchema>) => {
+  const onSubmit = (values: z.infer<typeof LoginSchema>) => {
     setError(null);
     setSuccess(null);
 
-    const submitHandler = async (values: z.infer<typeof AuthSchema>) => {
+    const submitHandler = async (values: z.infer<typeof LoginSchema>) => {
       console.log("values", values);
 
       try {
-        const response =
-          type == "login" ? await login(values) : await signUp(values);
+        const response = await login(values);
         // const response = await login(values);
 
         if (response?.error) {
@@ -80,9 +76,12 @@ const AuthForm = ({ type }: Props) => {
       </div>
       <FormError message={error} />
       <FormSuccess message={success} />
-      <Button type="submit">{type === "login" ? "Log In" : "Sign Up"}</Button>
+      <SocialButton />
+      <div className="py-4">
+        <Button type="submit">Log In</Button>
+      </div>
     </form>
   );
 };
 
-export default AuthForm;
+export default LoginForm;

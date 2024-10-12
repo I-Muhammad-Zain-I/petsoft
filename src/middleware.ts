@@ -10,7 +10,7 @@ import authConfig from "./auth.config";
 import { NextApiRequest } from "next";
 
 const { auth } = NextAuth(authConfig);
-type CombineRequest = Request & NextApiRequest;
+
 
 export default auth((req) => {
   const { nextUrl } = req;

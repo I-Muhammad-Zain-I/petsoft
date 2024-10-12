@@ -4,7 +4,12 @@ import prisma from "./db";
 import { revalidatePath } from "next/cache";
 import { sleep } from "./utils";
 import { PetEssentials } from "../../types";
-import { AuthSchema, petFormSchema, petIdSchema } from "./validations";
+import {
+  LoginSchema,
+  petFormSchema,
+  petIdSchema,
+  SignupSchema,
+} from "./validations";
 import { AuthError } from "next-auth";
 import { DEFAULT_LOGIN_REDIRECT } from "@/auth-routes";
 import { signIn } from "@/auth";
@@ -14,8 +19,8 @@ import bcrypt from "bcryptjs";
 
 // USER
 
-const signUp = async (signUpData: z.infer<typeof AuthSchema>) => {
-  const validatedFields = AuthSchema.safeParse(signUpData);
+const signUp = async (signUpData: z.infer<typeof SignupSchema>) => {
+  const validatedFields = SignupSchema.safeParse(signUpData);
 
   if (!validatedFields.success) {
     return {
@@ -23,7 +28,7 @@ const signUp = async (signUpData: z.infer<typeof AuthSchema>) => {
     };
   }
 
-  const { email, password } = validatedFields.data;
+  const { name, email, password } = validatedFields.data;
 
   // checking if user exists
   const user = await getUserByEmail(email);
@@ -38,6 +43,7 @@ const signUp = async (signUpData: z.infer<typeof AuthSchema>) => {
 
   await prisma.user.create({
     data: {
+      name,
       email,
       hashedPassword,
     },
@@ -48,8 +54,8 @@ const signUp = async (signUpData: z.infer<typeof AuthSchema>) => {
   };
 };
 
-const login = async (loginData: z.infer<typeof AuthSchema>) => {
-  const validatedFields = AuthSchema.safeParse(loginData);
+const login = async (loginData: z.infer<typeof LoginSchema>) => {
+  const validatedFields = LoginSchema.safeParse(loginData);
 
   if (!validatedFields.success) {
     return {

@@ -4,6 +4,7 @@ import Credentials, {
 } from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import prisma from "./lib/db";
+import Google from "next-auth/providers/google";
 
 import type { NextAuthConfig } from "next-auth";
 
@@ -35,5 +36,11 @@ const authorize = async (
 };
 
 export default {
-  providers: [Credentials({ authorize })],
+  providers: [
+    Google({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    }),
+    Credentials({ authorize }),
+  ],
 } satisfies NextAuthConfig;

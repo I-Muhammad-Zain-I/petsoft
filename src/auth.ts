@@ -10,6 +10,10 @@ declare module "next-auth" {
   interface Session {
     user: {
       role: "ADMIN" | "USER";
+      email: string;
+      isTwoFactorEnabled: boolean;
+      isOAuth: boolean;
+      hasCompletedPayment: boolean;
     } & DefaultSession["user"];
   }
 }
@@ -20,6 +24,9 @@ declare module "next-auth" {
 declare module "@auth/core/jwt" {
   interface JWT {
     role: "ADMIN" | "USER";
+    hasCompletedPayment: boolean;
+    email: string;
+    isOAuth: boolean;
   }
 }
 
@@ -51,9 +58,12 @@ export const {
   },
   callbacks: {
     async signIn({ user, account }) {
+      // Allow OAuth without email verification
       if (account?.provider !== "credentials") return true;
 
-      // Allow OAuth without email verification
+      // if user does not exists
+      if (!user.id) return false;
+
       const existingUser = await getUserById(user.id);
 
       // Prevents sign in if email is unverified
@@ -91,12 +101,13 @@ export const {
       }
 
       if (session.user) {
-        session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as Boolean;
+        session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
       }
 
       if (session.user) {
         session.user.name = token.name;
         session.user.email = token.email;
+        session.user.hasCompletedPayment = token.hasCompletedPayment;
         session.user.isOAuth = token.isOAuth as boolean;
       }
 
@@ -118,6 +129,10 @@ export const {
       token.isOAuth = Boolean(existingAccount);
       token.name = existingUser.name;
       token.email = existingUser.email;
+
+      // Payment checking in middleware
+      token.hasCompletedPayment = existingUser.hasCompletedPayment;
+
       // hotfix -> sqlite does not support enums
       token.role = existingUser.role as "ADMIN" | "USER";
       token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;

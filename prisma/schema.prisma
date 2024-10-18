@@ -24,6 +24,7 @@ model User {
   role                    String                 @default("USER")
   accounts                Account[]
   pets                    Pet[]
+  hasCompletedPayment     Boolean                @default(false)
   isTwoFactorEnabled      Boolean                @default(false)
   twoFactorConfirmation   TwoFactorConfirmation?
   twoFactorConfirmationId String?

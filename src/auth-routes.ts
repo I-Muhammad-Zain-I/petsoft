@@ -18,6 +18,8 @@ export const authRoutes = [
   // "/auth/error",
 ];
 
+export const externalUrls = ["https://checkout.stripe.com"];
+
 /**
  * Prefix for API authentication routes
  * routes that begin with this prefix are used for api authentication

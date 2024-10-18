@@ -1,4 +1,4 @@
-import prisma from "@/lib/db";
+import prisma from "@/server/config/db";
 
 const getUserByEmail = async (email: string) => {
   try {

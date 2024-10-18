@@ -15,18 +15,35 @@ const PetList = () => {
     pet.name.toLowerCase().includes(searchQuery)
   );
 
+  const selectPetHandler = (petId: string) => {
+    if (petId === selectedPetId) {
+      handleChangeSelectedPetId("");
+    } else handleChangeSelectedPetId(petId);
+  };
+
+  const NoPetFoundContent = pets.length == 0 && (
+    <EmptyPetFeedBack message={"You didn't left any pet"} />
+  );
+
+  const NoSearchResultContent = filteredPets.length == 0 && (
+    <EmptyPetFeedBack message={"No Pet Found"} />
+  );
+
   return (
-    <ul className="bg-white border-b border-light">
+    <ul className="bg-white border-b border-light w-full h-full">
+      {NoPetFoundContent}
+      {NoSearchResultContent}
+
       {filteredPets.map((pet) => (
         <li key={pet.id}>
           <button
-            onClick={() => handleChangeSelectedPetId(pet.id)}
+            onClick={() => selectPetHandler(pet.id)}
             className={cn(
-              "flex items-center h-[70px] w-full cursor-pointer px-5 text-base gap-3 hover:bg-[#EFF1F2] focus:bg-[#EFF1F2] transition",
-              {
-                "bg-[#EFF1F2]": pet.id === selectedPetId,
-              }
+              "flex items-center h-[70px] w-full cursor-pointer px-5 text-base gap-3 hover:bg-[#EFF1F2] focus:bg-[#EFF1F2] transition"
             )}
+            style={{
+              backgroundColor: pet.id === selectedPetId ? "#EFF1F2" : "white",
+            }}
           >
             <Image
               src={pet.imageUrl}
@@ -40,6 +57,14 @@ const PetList = () => {
         </li>
       ))}
     </ul>
+  );
+};
+
+const EmptyPetFeedBack = ({ message }) => {
+  return (
+    <div className="flex justify-center items-center w-full h-full">
+      {message}
+    </div>
   );
 };
 

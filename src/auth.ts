@@ -1,9 +1,10 @@
 import NextAuth, { DefaultSession } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import prisma from "./lib/db";
+import prisma from "./server/config/db";
 import authConfig from "./auth.config";
-import { getUserById } from "./lib/utilities/user";
-import { getAccountByUserId } from "./lib/utilities/account";
+import { getUserById } from "./server/data/user";
+import { getAccountByUserId } from "./server/data/account";
+import { getTwoFactorConfirmationByUserId } from "./server/data/two-factor-confirmation";
 
 declare module "next-auth" {
   interface Session {
@@ -49,6 +50,37 @@ export const {
     },
   },
   callbacks: {
+    async signIn({ user, account }) {
+      if (account?.provider !== "credentials") return true;
+
+      // Allow OAuth without email verification
+      const existingUser = await getUserById(user.id);
+
+      // Prevents sign in if email is unverified
+      if (!existingUser?.emailVerified) return false;
+
+      // Checking if 2FA is enabled
+      if (existingUser?.isTwoFactorEnabled) {
+        const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(
+          existingUser.id
+        );
+
+        if (!twoFactorConfirmation) return false;
+
+        /**
+         * Delete two factor confirmation for next time ->
+         * so user would need to do 2FA again
+         */
+
+        await prisma.twoFactorConfirmation.delete({
+          where: {
+            id: twoFactorConfirmation.id,
+          },
+        });
+      }
+
+      return true;
+    },
     async session({ token, session }) {
       if (token.sub && session.user) {
         session.user.id = token.sub;

@@ -6,10 +6,12 @@ import React, {
   useTransition,
 } from "react";
 import { createContext } from "react";
-import { Pet } from "@prisma/client";
-import { addPet, deletePet, editPet } from "@/lib/actions";
+
+import { addPet, deletePet, editPet } from "@/server/actions/pet-actions";
 import { toast } from "sonner";
 import { PetEssentials } from "../../types";
+import { useSession } from "next-auth/react";
+import { toastHandler } from "@/lib/utils";
 
 type PetContextProviderProps = {
   data: PetEssentials[] | [];
@@ -41,6 +43,9 @@ export const PetContext = createContext<PetContextType>({
 const PetContextProvider = ({ data, children }: PetContextProviderProps) => {
   // const [spets, setPets] = useState(pets);
   // console.log(data);
+  const { data: session } = useSession();
+  console.log("data", session);
+
   const [isPending, startTransition] = useTransition();
 
   const [optimisticPets, setOptimisticPets] = useOptimistic(
@@ -73,20 +78,14 @@ const PetContextProvider = ({ data, children }: PetContextProviderProps) => {
   const handleAddPet = async (newPet: PetEssentials) => {
     // setPets((prev) => [...prev, { ...newPet, id: Date.now().toString() }]);
     setOptimisticPets({ action: "add", payload: newPet });
-    const error = await addPet(newPet);
-    if (error) {
-      toast.warning(error.message);
-      return;
-    }
+    const response = await addPet(newPet, session?.user.id);
+    toastHandler(response);
   };
 
   const handleEditPet = async (petId: string, newPet: PetEssentials) => {
     setOptimisticPets({ action: "edit", payload: { ...newPet, id: petId } });
-    const error = await editPet(newPet, petId);
-    if (error) {
-      toast.warning("Failed to edit pet");
-      return;
-    }
+    const response = await editPet(newPet, petId);
+    toastHandler(response);
   };
 
   const handleCheckoutPet = async (id: string) => {
@@ -94,11 +93,8 @@ const PetContextProvider = ({ data, children }: PetContextProviderProps) => {
       setOptimisticPets({ action: "delete", payload: { id } })
     );
 
-    const error = await deletePet(selectedPet!.id!);
-    if (error) {
-      toast.warning("Failed to delete pet");
-      return;
-    }
+    const response = await deletePet(selectedPet!.id!);
+    toastHandler(response);
     setSelectedPetId(null);
   };
 

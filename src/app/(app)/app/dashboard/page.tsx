@@ -2,11 +2,11 @@
 
 import Branding from "@/components/branding";
 import ContentBlock from "@/components/content-block";
-import PetButton from "@/components/pet-button";
-import PetDetails from "@/components/pet-details";
-import PetList from "@/components/pet-list";
-import SearchForm from "@/components/search-form";
-import Stats from "@/components/stats";
+import PetButton from "@/components/dashboard/pet-button";
+import PetDetails from "@/components/dashboard/pet-details";
+import PetList from "@/components/dashboard/pet-list";
+import SearchForm from "@/components/dashboard/search-form";
+import Stats from "@/components/dashboard/stats";
 import { useSession } from "next-auth/react";
 import React from "react";
 

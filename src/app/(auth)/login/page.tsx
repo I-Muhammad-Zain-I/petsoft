@@ -1,6 +1,5 @@
-import AuthForm from "@/components/signup-form";
 import H1 from "@/components/h1";
-import LoginForm from "@/components/login-form";
+import LoginForm from "@/components/auth/login-form";
 import Link from "next/link";
 import React from "react";
 

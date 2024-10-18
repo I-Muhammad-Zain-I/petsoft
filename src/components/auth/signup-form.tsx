@@ -1,20 +1,20 @@
 "use client";
 
-import { Label } from "./ui/label";
+import { Label } from "../ui/label";
 import React, { useState } from "react";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 
-import { login, signUp } from "@/lib/actions";
+import { signUp } from "@/server/actions/user-actions";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LoginSchema } from "@/lib/validations";
+import { SignupSchema } from "@/lib/validations";
 import { z } from "zod";
 import FormError from "./form-error";
 import FormSuccess from "./form-success";
 import SocialButton from "./social-button";
 
-const LoginForm = () => {
+const SignUpForm = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   // const [isPending, startTransition] = useTransition();
@@ -25,22 +25,23 @@ const LoginForm = () => {
     reset: resetForm,
     register,
   } = useForm({
-    resolver: zodResolver(LoginSchema),
+    resolver: zodResolver(SignupSchema),
     defaultValues: {
+      name: "",
       email: "",
       password: "",
     },
   });
 
-  const onSubmit = (values: z.infer<typeof LoginSchema>) => {
+  const onSubmit = (values: z.infer<typeof SignupSchema>) => {
     setError(null);
     setSuccess(null);
 
-    const submitHandler = async (values: z.infer<typeof LoginSchema>) => {
+    const submitHandler = async (values: z.infer<typeof SignupSchema>) => {
       console.log("values", values);
 
       try {
-        const response = await login(values);
+        const response = await signUp(values);
         // const response = await login(values);
 
         if (response?.error) {
@@ -66,9 +67,12 @@ const LoginForm = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="space-y-1">
+        <Label htmlFor="name">Name</Label>
+        <Input id="name" type="name" {...register("name")} />
+      </div>
+      <div className="space-y-1">
         <Label htmlFor="email">Email</Label>
         <Input id="email" type="email" {...register("email")} />
-        {/* {errors.email && <p className="text-red-500">{errors.email.message}</p>} */}
       </div>
       <div className="mb-4 mt-2 space-y-1">
         <Label htmlFor="password">Password</Label>
@@ -78,10 +82,10 @@ const LoginForm = () => {
       <FormSuccess message={success} />
       <SocialButton />
       <div className="py-4">
-        <Button type="submit">Log In</Button>
+        <Button type="submit">Sign Up</Button>
       </div>
     </form>
   );
 };
 
-export default LoginForm;
+export default SignUpForm;

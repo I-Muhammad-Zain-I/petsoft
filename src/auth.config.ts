@@ -3,7 +3,7 @@ import Credentials, {
   CredentialsConfig,
 } from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-import prisma from "./lib/db";
+import prisma from "./server/config/db";
 import Google from "next-auth/providers/google";
 
 import type { NextAuthConfig } from "next-auth";
@@ -25,8 +25,8 @@ const authorize = async (
     return null;
   }
 
-  const doesPasswordMatch = bcrypt.compare(password, user.hashedPassword);
-
+  const doesPasswordMatch = await bcrypt.compare(password, user.hashedPassword);
+  console.log("Password Match: ", doesPasswordMatch);
   if (!doesPasswordMatch) {
     console.log("Invalid password");
     return null;

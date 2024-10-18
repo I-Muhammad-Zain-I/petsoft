@@ -1,10 +1,10 @@
 "use client";
 import React from "react";
-import { Label } from "./ui/label";
-import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
 import { usePetContext } from "@/lib/hooks";
-import dogAvatar from "../../public/dogAvatar.svg";
+import dogAvatar from "../../../public/dogAvatar.svg";
 import PetFormBtn from "./pet-form-btn";
 
 import { useForm } from "react-hook-form";
@@ -21,20 +21,31 @@ type Props = {
 
 const PetForm = ({ actionType, onFormSubmission }: Props) => {
   const { handleAddPet, handleEditPet, selectedPet } = usePetContext();
+
+  let addDefaultValues = {
+    name: "",
+    ownerName: "",
+    imageUrl: "",
+    age: 1,
+    notes: "",
+  };
+  let editDefaultValues = {
+    name: selectedPet?.name,
+    ownerName: selectedPet?.ownerName,
+    imageUrl: selectedPet?.imageUrl,
+    age: selectedPet?.age,
+    notes: selectedPet?.notes,
+  };
+
   const {
     register,
     formState: { errors },
+    reset: resetForm,
     trigger,
     getValues,
   } = useForm<PetFormType>({
     resolver: zodResolver(petFormSchema),
-    defaultValues: {
-      name: selectedPet?.name,
-      ownerName: selectedPet?.ownerName,
-      imageUrl: selectedPet?.imageUrl,
-      age: selectedPet?.age,
-      notes: selectedPet?.notes,
-    },
+    defaultValues: actionType === "add" ? addDefaultValues : editDefaultValues,
   });
 
   return (
@@ -44,11 +55,12 @@ const PetForm = ({ actionType, onFormSubmission }: Props) => {
         if (!result) return;
 
         onFormSubmission();
-
         const petData = getValues();
         petData.imageUrl = petData.imageUrl || dogAvatar.src;
+
         if (actionType === "add") {
           console.log("petData", petData);
+
           handleAddPet(petData);
         } else if (actionType === "edit") {
           handleEditPet(selectedPet!.id, petData);

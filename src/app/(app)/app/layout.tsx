@@ -1,13 +1,15 @@
-import AppHeader from "@/components/app-header";
-import BackgroundPattern from "@/components/background-pattern";
-import AppFooter from "@/components/app-footer";
+import AppHeader from "@/components/layout/app-header";
+import BackgroundPattern from "@/components/shared/background-pattern";
+import AppFooter from "@/components/layout/app-footer";
 import React from "react";
 import PetContextProvider from "@/context/pet-context-provider";
 import { Pet } from "@prisma/client";
 import SearchContextProvider from "@/context/search-context-provider";
 import { Toaster } from "@/components/ui/sonner";
-import prisma from "@/lib/db";
+import prisma from "@/server/config/db";
 
+import { auth } from "@/auth";
+import { SessionProvider } from "next-auth/react";
 type Props = {};
 
 const Layout = async ({
@@ -15,6 +17,8 @@ const Layout = async ({
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
+  const session = await auth();
+  console.log("session Data", session);
   // const response = await fetch(
   //   "https://bytegrad.com/course-assets/projects/petsoft/api/pets"
   // );
@@ -23,7 +27,11 @@ const Layout = async ({
   // }
   // const data: Pet[] = await response.json();
   // console.log(data);
-  const pets: Pet[] = await prisma?.pet.findMany();
+  const pets: Pet[] = await prisma?.pet.findMany({
+    where: {
+      userId: session?.user.id,
+    },
+  });
   console.log(pets);
   // const user = await prisma?.user.findUnique({
 
@@ -34,9 +42,11 @@ const Layout = async ({
       <BackgroundPattern />
       <section className="flex flex-col max-w-[1050px] mx-auto px-5 min-h-screen">
         <AppHeader />
-        <SearchContextProvider>
-          <PetContextProvider data={pets}>{children}</PetContextProvider>
-        </SearchContextProvider>
+        <SessionProvider session={session}>
+          <SearchContextProvider>
+            <PetContextProvider data={pets}>{children}</PetContextProvider>
+          </SearchContextProvider>
+        </SessionProvider>
         <AppFooter />
       </section>
       <Toaster position="top-right" />

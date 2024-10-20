@@ -48,6 +48,11 @@ const PetForm = ({ actionType, onFormSubmission }: Props) => {
     defaultValues: actionType === "add" ? addDefaultValues : editDefaultValues,
   });
 
+  const fileTypeValidation = (value) => {
+    console.log("validate invoked");
+    return false;
+  };
+
   return (
     <form
       action={async (formData) => {
@@ -88,6 +93,7 @@ const PetForm = ({ actionType, onFormSubmission }: Props) => {
             <p className="text-red-500">{errors.imageUrl.message}</p>
           )}
         </div>
+
         <div className="space-y-1">
           <Label htmlFor="age">Age</Label>
           <Input

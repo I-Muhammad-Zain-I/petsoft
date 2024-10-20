@@ -6,7 +6,6 @@ import { PlusIcon } from "@radix-ui/react-icons";
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -64,8 +63,6 @@ const PetButton = ({
       </DialogContent>
     </Dialog>
   );
-
-  return <p>No button variant choosen</p>;
 };
 
 export default PetButton;

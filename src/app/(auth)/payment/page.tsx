@@ -6,9 +6,9 @@ import { createCheckoutSession } from "@/server/actions/payment-actions";
 import { useSession } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useTransition } from "react";
-
+import Link from "next/link";
 const PaymentPage = () => {
-  const session = useSession();
+  const session = useSession(); // calling to update session on strip redirect to app
   const searchParams = useSearchParams();
   const isPaymentSuccess = searchParams.get("success");
   const isPaymentCancelled = searchParams.get("cancel");
@@ -29,7 +29,12 @@ const PaymentPage = () => {
         </Button>
       )}
       {isPaymentSuccess && (
-        <p className="text-sm text-green-600">Payment Successfull</p>
+        <div className="flex flex-col justify-center items-center">
+          <p className="text-sm text-green-600">Payment Successfull</p>
+          <Button asChild>
+            <Link href={"/app/dashboard"}>Access PetSoft</Link>
+          </Button>
+        </div>
       )}
 
       {isPaymentCancelled && (

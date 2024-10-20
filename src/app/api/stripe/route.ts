@@ -2,6 +2,7 @@ import Stripe from "stripe";
 import stripe from "@/server/config/payment";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
+import { sendPetSoftPurchaseCongratulations } from "@/lib/mail";
 
 export async function POST(request: Request) {
   const body = await request.text();
@@ -27,7 +28,7 @@ export async function POST(request: Request) {
     if (!session.customer_email) {
       console.log("Stripe: Email does not exists");
     }
-    await prisma?.user.update({
+    const user = await prisma?.user.update({
       where: {
         email: session.customer_email,
       },
@@ -35,8 +36,8 @@ export async function POST(request: Request) {
         hasCompletedPayment: true,
       },
     });
+    await sendPetSoftPurchaseCongratulations(user?.email);
   }
-
   console.log("stripeWebHook", body);
   return new NextResponse("ok", { status: 200 });
 }

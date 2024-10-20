@@ -2,8 +2,8 @@
 import { usePetContext } from "@/lib/hooks";
 import Image from "next/image";
 import React, { useTransition } from "react";
-import { Pet } from "@prisma/client";
 import PetButton from "./pet-button";
+import { PetEssentials } from "../../../types";
 
 const PetDetails = () => {
   const { selectedPet } = usePetContext();
@@ -30,7 +30,7 @@ const PetDetails = () => {
 export default PetDetails;
 
 type Props = {
-  selectedPet: Pet | undefined;
+  selectedPet: PetEssentials | undefined;
 };
 
 const EmptyView = () => {

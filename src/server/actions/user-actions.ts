@@ -12,7 +12,7 @@ import { z } from "zod";
 import bcrypt from "bcryptjs";
 import prisma from "@/server/config/db";
 import { DEFAULT_LOGIN_REDIRECT } from "@/auth-routes";
-import { isRedirectError } from "next/dist/client/components/redirect";
+
 import { getTwoFactorTokenByEmail } from "../data/two-factor-token";
 import { getTwoFactorConfirmationByUserId } from "../data/two-factor-confirmation";
 import { signOut } from "@/auth";
@@ -49,6 +49,7 @@ const signUp = async (signUpData: z.infer<typeof SignupSchema>) => {
   });
 
   const verificationToken = await generateVerificationToken(email);
+
   await sendVerifcationEmail(
     verificationToken?.email,
     verificationToken?.token

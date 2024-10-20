@@ -26,7 +26,6 @@ const LoginForm = () => {
   const callbackUrl = searchParams.get("callbackUrl")
     ? decodeURIComponent(searchParams.get("callbackUrl")!)
     : null; // Decode the callbackUrl
-  // const [isPending, startTransition] = useTransition();
 
   const {
     handleSubmit,
@@ -84,11 +83,13 @@ const LoginForm = () => {
         <div className="space-y-1">
           <Label htmlFor="code">code</Label>
           <Input id="code" type="text" {...register("code")} />
-          {/* {errors.email && <p className="text-red-500">{errors.email.message}</p>} */}
+          {errors.email && (
+            <p className="text-red-500">{errors.email.message}</p>
+          )}
         </div>
       )}
       {!showTwoFactor && (
-        <>
+        <div>
           <div className="space-y-1">
             <Label htmlFor="email">Email</Label>
             <Input id="email" type="email" {...register("email")} />
@@ -111,7 +112,7 @@ const LoginForm = () => {
             </Link>
             .
           </p>
-        </>
+        </div>
       )}
       <FormError message={error} />
       <FormSuccess message={success} />

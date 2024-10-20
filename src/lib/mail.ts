@@ -33,4 +33,18 @@ const sendTwoFactorTokenEmail = async (email: string, token: string) => {
   });
 };
 
-export { sendVerifcationEmail, sendPasswordResetMail, sendTwoFactorTokenEmail };
+const sendPetSoftPurchaseCongratulations = async (email: string) => {
+  await resend.emails.send({
+    from: "onboarding@resend.dev",
+    to: email,
+    subject: "PetSoft Lifetime Access Purchased!",
+    html: `<p>Congratulations your purchasing Petsoft Successfully</p>`,
+  });
+};
+
+export {
+  sendVerifcationEmail,
+  sendPasswordResetMail,
+  sendTwoFactorTokenEmail,
+  sendPetSoftPurchaseCongratulations,
+};

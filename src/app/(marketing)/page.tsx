@@ -1,18 +1,27 @@
+"use client";
 import Logo from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
-
+import { motion } from "framer-motion";
 export default function Home() {
   return (
-    <main className="bg-[#5DC9AB] min-h-screen flex flex-col-reverse xl:flex-row items-center justify-center gap-10">
+    <main className="bg-[#5DC9AB] min-h-screen flex flex-col-reverse xl:flex-row items-center justify-center gap-10 relative">
       <Image
         src="https://bytegrad.com/course-assets/react-nextjs/petsoft-preview.png"
         alt="Preview of Petsoft"
         width={519}
         height={472}
       />
-      <div>
+      <motion.div
+        initial={{
+          opacity: 0,
+        }}
+        animate={{
+          opacity: 1,
+        }}
+        transition={{ type: "spring", delay: 0.2 }}
+      >
         <Logo />
         <h1 className="text-5xl font-semibold my-6 max-w-[500px]">
           Manage your
@@ -30,7 +39,7 @@ export default function Home() {
             <Link href="/login">login</Link>
           </Button>
         </div>
-      </div>
+      </motion.div>
     </main>
   );
 }

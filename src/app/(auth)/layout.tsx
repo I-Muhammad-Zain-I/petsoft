@@ -1,5 +1,4 @@
 import React from "react";
-import Logo from "@/components/logo";
 import { auth } from "@/auth";
 import { SessionProvider } from "next-auth/react";
 type AuthLayoutProps = {

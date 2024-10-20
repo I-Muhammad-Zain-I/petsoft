@@ -77,7 +77,10 @@ const PetContextProvider = ({ data, children }: PetContextProviderProps) => {
 
   const handleAddPet = async (newPet: PetEssentials) => {
     // setPets((prev) => [...prev, { ...newPet, id: Date.now().toString() }]);
-    setOptimisticPets({ action: "add", payload: newPet });
+    startTransition(() => {
+      setOptimisticPets({ action: "add", payload: newPet });
+    });
+
     const response = await addPet(newPet, session?.user.id);
     toastHandler(response);
   };

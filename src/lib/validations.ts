@@ -13,13 +13,6 @@ const petFormSchema = z.object({
   ]),
 });
 
-const AuthSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(1, {
-    message: "Valid password is required",
-  }),
-});
-
 const LoginSchema = z.object({
   email: z.string().email(),
   password: z.string().min(1, {
@@ -48,19 +41,11 @@ const NewPasswordSchema = z.object({
   }),
 });
 
-// const RegisterSchema = z.object({
-//   email: z.string().email(),
-//   password: z.string().min(1, {
-//     message: "Valid password is required",
-//   }),
-// });
-
 export type PetFormType = z.infer<typeof petFormSchema>;
 
 export {
   petFormSchema,
   petIdSchema,
-  AuthSchema,
   LoginSchema,
   SignupSchema,
   ResetSchema,

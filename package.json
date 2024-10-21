@@ -37,6 +37,7 @@
     "react-hook-form": "^7.46.0",
     "resend": "^4.0.0",
     "shadcn-ui": "^0.8.0",
+    "sharp": "^0.33.5",
     "sonner": "^1.5.0",
     "stripe": "^17.2.0",
     "tailwind-merge": "^2.5.2",

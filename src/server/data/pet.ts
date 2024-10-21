@@ -1,17 +1,12 @@
+import { Pet } from "@prisma/client";
 import prisma from "../config/db";
 
-const getPetsByUserId = async (userId: number) => {
-  let pets = [];
-
-  try {
-    pets = await prisma?.pet.findMany({
-      where: {
-        userId: userId!,
-      },
-    });
-  } catch (error) {
-    console.log(error);
-  }
+const getPetsByUserId = async (userId: string) => {
+  const pets = await prisma?.pet.findMany({
+    where: {
+      userId: userId!,
+    },
+  });
 
   return pets;
 };

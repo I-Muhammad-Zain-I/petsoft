@@ -14,7 +14,7 @@ export async function POST(request: Request) {
     event = stripe.webhooks.constructEvent(
       body,
       signature,
-      process.env.STRIPE_WEBHOOK_SECRET
+      process.env.STRIPE_WEBHOOK_SECRET!
     );
   } catch (error) {
     return new NextResponse("invalid Signature", { status: 400 });
@@ -30,13 +30,13 @@ export async function POST(request: Request) {
     }
     const user = await prisma?.user.update({
       where: {
-        email: session.customer_email,
+        email: session.customer_email as string,
       },
       data: {
         hasCompletedPayment: true,
       },
     });
-    await sendPetSoftPurchaseCongratulations(user?.email);
+    await sendPetSoftPurchaseCongratulations(user?.email!);
   }
   console.log("stripeWebHook", body);
   return new NextResponse("ok", { status: 200 });

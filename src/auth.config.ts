@@ -1,5 +1,4 @@
 import Credentials, {
-  CredentialInput,
   CredentialsConfig,
 } from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
@@ -8,15 +7,13 @@ import Google from "next-auth/providers/google";
 
 import type { NextAuthConfig } from "next-auth";
 
-const authorize = async (
-  credentials: Partial<CredentialsConfig<Record<string, CredentialInput>>>
-) => {
+const authorize = async (credentials: Partial<Record<string, unknown>>) => {
   const { email, password } = credentials;
   console.log(email, password);
 
   const user = await prisma.user.findUnique({
     where: {
-      email: email,
+      email: email as string,
     },
   });
 
@@ -25,7 +22,10 @@ const authorize = async (
     return null;
   }
 
-  const doesPasswordMatch = await bcrypt.compare(password, user.hashedPassword);
+  const doesPasswordMatch = await bcrypt.compare(
+    password as string,
+    user.hashedPassword as string
+  );
   console.log("Password Match: ", doesPasswordMatch);
   if (!doesPasswordMatch) {
     console.log("Invalid password");

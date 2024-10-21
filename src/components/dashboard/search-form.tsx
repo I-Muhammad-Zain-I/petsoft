@@ -1,11 +1,9 @@
 "use client";
 
 import { useSearchContext } from "@/lib/hooks";
-import React, { useState } from "react";
+import React from "react";
 
-type Props = {};
-
-const SearchForm = (props: Props) => {
+const SearchForm = () => {
   const { searchQuery, handleChangeSeachQuery } = useSearchContext();
 
   return (

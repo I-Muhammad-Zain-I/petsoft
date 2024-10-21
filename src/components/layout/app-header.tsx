@@ -6,8 +6,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
-type Props = {};
-
 const routes = [
   {
     label: "Dashboard",
@@ -19,7 +17,7 @@ const routes = [
   },
 ];
 
-const AppHeader = (props: Props) => {
+const AppHeader = () => {
   const activePathname = usePathname();
 
   const links = routes.map((route) => (

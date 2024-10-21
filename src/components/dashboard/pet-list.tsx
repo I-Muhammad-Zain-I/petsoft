@@ -3,12 +3,10 @@ import { usePetContext, useSearchContext } from "@/lib/hooks";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import React from "react";
-import PetButton from "./pet-button";
-import { AnimatePresence, delay, motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 const PetList = () => {
   const { pets, selectedPetId, handleChangeSelectedPetId } = usePetContext();
-  console.log("pets", pets);
 
   const { searchQuery } = useSearchContext();
 

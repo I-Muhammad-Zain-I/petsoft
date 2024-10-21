@@ -72,7 +72,7 @@ const LoginForm = () => {
     };
 
     startTransition(() => {
-      console.log("STARTED");
+      // console.log("STARTED");
       submitHandler(values);
     });
   };
@@ -100,6 +100,9 @@ const LoginForm = () => {
           <div className="mb-4 mt-2 space-y-1">
             <Label htmlFor="password">Password</Label>
             <Input type="password" id="password" {...register("password")} />
+            {errors.password && (
+              <p className="text-red-500">{errors.password.message}</p>
+            )}
           </div>
 
           <SocialButton />
@@ -117,7 +120,9 @@ const LoginForm = () => {
       <FormError message={error} />
       <FormSuccess message={success} />
       <div className="py-4">
-        <Button type="submit">{showTwoFactor ? "Verify" : "Login"}</Button>
+        <Button type="submit" disabled={isPending}>
+          {showTwoFactor ? "Verify" : "Login"}
+        </Button>
       </div>
     </form>
   );

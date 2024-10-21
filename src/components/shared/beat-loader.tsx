@@ -1,21 +1,26 @@
 "use client";
 import React from "react";
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
-const BeatLoader = () => {
+type Props = {
+  className?: string;
+};
+
+const BeatLoader = ({ className = "w-6 h-6" }: Props) => {
   return (
     <div className="flex justify-center items-center gap-x-2">
-      <CirclularBeat />
-      <CirclularBeat />
-      <CirclularBeat />
+      <CirclularBeat className={className} />
+      <CirclularBeat className={className} />
+      <CirclularBeat className={className} />
     </div>
   );
 };
 
-const CirclularBeat = () => {
+const CirclularBeat = ({ className }: Props) => {
   return (
     <motion.div
-      className="w-6 h-6 bg-black/80 rounded-full"
+      className={cn(className, "rounded-full")}
       initial={{
         scale: 0.5,
       }}

@@ -35,8 +35,6 @@ const PetButton = ({
     );
   }
 
-  // if (actionType === "edit" || actionType === "add")
-
   return (
     <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
       <DialogTrigger asChild>

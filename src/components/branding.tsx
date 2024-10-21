@@ -1,9 +1,7 @@
 import React from "react";
 import H1 from "./h1";
 
-type Props = {};
-
-const Branding = (props: Props) => {
+const Branding = () => {
   return (
     <section>
       <H1>

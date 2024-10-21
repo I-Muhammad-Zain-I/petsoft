@@ -7,14 +7,10 @@ import PetDetails from "@/components/dashboard/pet-details";
 import PetList from "@/components/dashboard/pet-list";
 import SearchForm from "@/components/dashboard/search-form";
 import Stats from "@/components/dashboard/stats";
-import { useSession } from "next-auth/react";
 import React from "react";
+import style from "@/components/dashboard/scroll.module.css";
 
-type Props = {};
-
-const Page = (props: Props) => {
-  const session = useSession();
-  console.log(session);
+const DashboardPage = () => {
   return (
     <main>
       <div className="flex items-center justify-between text-white py-8">
@@ -28,10 +24,14 @@ const Page = (props: Props) => {
         </div>
 
         <div className="relative md:row-start-2 md:row-span-full md:col-start-1 md:col-span-1">
-          <ContentBlock>
-            <PetList />
+          <ContentBlock className="bg-white">
+            <div className={style.scroll}>
+              <PetList />
+            </div>
             <div className="absolute bottom-4 right-4">
-              <PetButton actionType="add">Add</PetButton>
+              <PetButton actionType="add" onClick={() => {}}>
+                Add
+              </PetButton>
             </div>
           </ContentBlock>
         </div>
@@ -45,4 +45,4 @@ const Page = (props: Props) => {
   );
 };
 
-export default Page;
+export default DashboardPage;

@@ -3,9 +3,7 @@ import LoginForm from "@/components/auth/login-form";
 import Link from "next/link";
 import React from "react";
 
-type Props = {};
-
-const Login = (props: Props) => {
+const Login = () => {
   return (
     <main>
       <H1 className="text-center">Log In</H1>

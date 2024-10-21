@@ -10,15 +10,15 @@ import { auth } from "./auth";
 
 export default auth((req) => {
   const { nextUrl } = req;
-  console.log("nextUrl", nextUrl.href);
+  // console.log("nextUrl", nextUrl.href);
 
   const isExternalUrl = externalUrls.some((url) =>
     nextUrl.href.startsWith(url)
   );
 
-  console.log("isExternal", isExternalUrl);
+  // console.log("isExternal", isExternalUrl);
   if (isExternalUrl) {
-    console.log("External URL detected, skipping middleware redirection");
+    // console.log("External URL detected, skipping middleware redirection");
     return null;
   }
 

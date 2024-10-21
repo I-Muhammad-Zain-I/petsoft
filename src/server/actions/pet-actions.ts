@@ -1,13 +1,14 @@
 "use server";
 import { sleep } from "@/lib/utils";
-import { petFormSchema, petIdSchema } from "@/lib/validations";
+import { petFormSchemaPostUpload, petIdSchema } from "@/lib/validations";
 import { revalidatePath } from "next/cache";
 import prisma from "@/server/config/db";
+import { Pet, Prisma } from "@prisma/client";
 
 const addPet = async (pet: unknown, userId: string) => {
   await sleep(1000);
 
-  const validatedPet = petFormSchema.safeParse(pet);
+  const validatedPet = petFormSchemaPostUpload.safeParse(pet);
 
   if (userId === undefined) {
     return {
@@ -39,7 +40,7 @@ const addPet = async (pet: unknown, userId: string) => {
 
 const editPet = async (pet: unknown, id: unknown) => {
   await sleep(1000);
-  const validatedPet = petFormSchema.safeParse(pet);
+  const validatedPet = petFormSchemaPostUpload.safeParse(pet);
   const validatedId = petIdSchema.safeParse(id);
   if (!validatedPet.success || !validatedId.success) {
     return {
@@ -47,12 +48,24 @@ const editPet = async (pet: unknown, id: unknown) => {
     };
   }
 
+  /**
+   * Hotfix for image url as Prisma.skip is in preview thus using undefined to skip field updates
+   */
+
+  let imageUrl =
+    validatedPet.data.imageUrl === "" ? undefined : validatedPet.data.imageUrl;
+
+  console.log("imageUrl", imageUrl);
+
   try {
     await prisma.pet.update({
       where: {
         id: id,
       },
-      data: validatedPet.data,
+      data: {
+        ...validatedPet.data,
+        imageUrl: imageUrl,
+      },
     });
   } catch (err) {
     console.log(err);
@@ -84,4 +97,20 @@ const deletePet = async (id: unknown) => {
   return { success: "Pet removed from self care" };
 };
 
-export { addPet, editPet, deletePet };
+const getPetImageId = async (petId: string) => {
+  let pet: Pet = "";
+
+  try {
+    pet = await prisma.pet.findFirst({
+      where: {
+        id: petId,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    return { error: err.name };
+  }
+  return pet?.imageId;
+};
+
+export { addPet, editPet, deletePet, getPetImageId };

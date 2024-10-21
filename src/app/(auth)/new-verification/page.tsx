@@ -48,7 +48,7 @@ const NewVerificationPage = () => {
       backButtonHref="/login"
     >
       <div className="flex flex-col items-center w-full justify-center">
-        {!success && !error && <BeatLoader />}
+        {!success && !error && <BeatLoader className="w-6 h-6 bg-black/80" />}
         <FormSuccess message={success} />
         <FormError message={error} />
       </div>

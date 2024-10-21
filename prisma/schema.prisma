@@ -11,8 +11,9 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
@@ -38,6 +39,7 @@ model Pet {
   name      String
   ownerName String
   imageUrl  String
+  imageId   String?
   age       Int
   notes     String
   User      User     @relation(fields: [userId], references: [id])

@@ -3,6 +3,7 @@ import stripe from "@/server/config/payment";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { sendPetSoftPurchaseCongratulations } from "@/lib/mail";
+import prisma from "@/server/config/db";
 
 export async function POST(request: Request) {
   const body = await request.text();
